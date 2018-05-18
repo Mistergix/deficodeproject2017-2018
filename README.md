@@ -8,3 +8,5 @@ UML : https://www.draw.io/#HMistergix%2Fdeficodeproject%2Fmaster%2FGameDiagram.x
 
 BrainStorming : https://drive.mindmup.com/map/1VAfuCHgMtH-VB8rHd1TGm66At1EOjHyr
 https://drive.google.com/file/d/1VAfuCHgMtH-VB8rHd1TGm66At1EOjHyr/view?usp=sharing
+
+Pour créer sprite sheets : https://www.codeandweb.com/sprite-sheet-maker
