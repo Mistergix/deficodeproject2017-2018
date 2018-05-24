@@ -11,6 +11,7 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
+        self.font_name = pg.font.match_font("arial")
 
     def _add_platform(self, x, y, w, h):
         p = Platform(x,y,w,h)
@@ -20,6 +21,7 @@ class Game:
 
     def new(self):
         # CREATE THE SPRITES GROUPS
+        self.score = 0
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
 
@@ -62,7 +64,12 @@ class Game:
                     h = 20
                     x = random.randrange(0, WIDTH - w)
                     y = random.randrange(-h - 55, -h -10)
-                    self._add_platform(x, y, w, h)     
+                    self._add_platform(x, y, w, h) 
+
+                    self.score += 10
+
+        if self.player.rect.bottom > HEIGHT:
+            self.gameOver()    
 
     def events(self):
         for ev in pg.event.get():
@@ -80,15 +87,32 @@ class Game:
     def draw(self):
         self.screen.fill(BLACK)
         self.all_sprites.draw(self.screen)
-
+        self.draw_text(str(self.score), 22, WHITE, WIDTH//2, 15)
         #######
         pg.display.flip()
+
+    def gameOver(self):
+        for sprite in self.all_sprites:
+            sprite.rect.y -= max(self.player.vel.y, 10)
+            if sprite.rect.bottom < 0:
+                sprite.kill()
+
+        if len(self.platforms) <= 0:
+            self.playing = False
 
     def show_start_screen(self):
         pass
 
     def show_go_screen(self):
         pass
+
+    def draw_text(self, text, size, color, x, y):
+        font = pg.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
+
 
 g = Game()
 g.show_start_screen()
