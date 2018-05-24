@@ -12,16 +12,17 @@ class Player(pg.sprite.Sprite):
         self.pos = vec(WIDTH//2, HEIGHT//2)
         self.vel = vec(0,0)
         self.acc = vec(0,0)
+        self.jumpHeight = -20
 
     def update(self):
-        self.acc = vec(0,0)
+        self.acc = vec(0,PLAYER_GRAV)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
             self.acc.x = -PLAYER_ACC
         if keys[pg.K_RIGHT]:
             self.acc.x = PLAYER_ACC
 
-        self.acc += self.vel * PLAYER_FRICTION
+        self.acc.x += self.vel.x * PLAYER_FRICTION
 
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
@@ -33,6 +34,9 @@ class Player(pg.sprite.Sprite):
 
 
         self.rect.midbottom = self.pos
+
+    def jump(self):
+        self.vel.y = self.jumpHeight
 
 
 class Platform(pg.sprite.Sprite):

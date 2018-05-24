@@ -27,8 +27,9 @@ class Game:
         self.player = Player()
         self.all_sprites.add(self.player)
         # CREATE THE PLATFORMS
-        self._add_platform(0, HEIGHT-40, WIDTH, 40)
-        self._add_platform(WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20)
+
+        for plat in PLATFORM_LIST:
+            self._add_platform(*plat)
 
         self.run()
 
@@ -42,16 +43,24 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-        if hits:
-            self.player.pos.y = hits[0].rect.top + 1
-            self.player.vel.y = 0
+        if self.player.vel.y > 0: # Only if the player is falling on the platform
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+            if hits:
+                self.player.pos.y = hits[0].rect.top + 1
+                self.player.vel.y = 0
 
     def events(self):
         for ev in pg.event.get():
             if ev.type == pg.QUIT:
                 self.playing = False
                 self.running = False
+
+            if ev.type == pg.KEYDOWN:
+                key = ev.key
+                if key == pg.K_SPACE:
+                    hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+                    if hits:
+                        self.player.jump()
 
     def draw(self):
         self.screen.fill(BLACK)
