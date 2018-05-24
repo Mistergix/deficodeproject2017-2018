@@ -12,6 +12,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
         self.font_name = pg.font.match_font("arial")
+        self.bgcolor = LIGHTBLUE
 
     def _add_platform(self, x, y, w, h):
         p = Platform(x,y,w,h)
@@ -85,7 +86,7 @@ class Game:
                         self.player.jump()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        self.screen.fill(self.bgcolor)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score), 22, WHITE, WIDTH//2, 15)
         #######
@@ -100,11 +101,35 @@ class Game:
         if len(self.platforms) <= 0:
             self.playing = False
 
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for ev in pg.event.get():
+                if ev.type == pg.QUIT:
+                    waiting = False
+                    self.running = False
+                if ev.type == pg.KEYDOWN:
+                    waiting = False
+
+
     def show_start_screen(self):
-        pass
+        self.screen.fill(self.bgcolor)
+        self.draw_text(TITLE, 48, WHITE, WIDTH//2, HEIGHT//4)
+        self.draw_text("Arrows to move, Space to jump", 22, WHITE, WIDTH//2, HEIGHT//2)
+        self.draw_text("Press a key to play", 22, WHITE, WIDTH//2, HEIGHT * 3/4)
+        pg.display.flip()
+        self.wait_for_key()
 
     def show_go_screen(self):
-        pass
+        if not self.running:
+            return
+        self.screen.fill(RED)
+        self.draw_text("Game over", 48, WHITE, WIDTH//2, HEIGHT//4)
+        self.draw_text("Score : {}".format(self.score), 22, WHITE, WIDTH//2, HEIGHT//2)
+        self.draw_text("Press a key to play again", 22, WHITE, WIDTH//2, HEIGHT * 3/4)
+        pg.display.flip()
+        self.wait_for_key()
 
     def draw_text(self, text, size, color, x, y):
         font = pg.font.Font(self.font_name, size)
