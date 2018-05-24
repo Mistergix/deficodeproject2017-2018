@@ -1,12 +1,28 @@
 import pygame as pg
+
 from settings import *
+
 vec = pg.math.Vector2
 
+class Spritesheet:
+    # utility class for loading and parsing spritesheets
+    def __init__(self, filename):
+        self.sheet = pg.image.load(filename).convert()
+
+    def get_image(self, x, y, w, h):
+        """
+        Loads the image on the spritesheet, given its x, y coordinate and its width and height
+        """
+        image = pg.Surface((w,h))
+        image.blit(self.sheet, (0,0), (x,y,w,h))
+        image.set_colorkey(BLACK)
+        image = pg.transform.scale(image, (w//2, h//2))
+        return image
+
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, image):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((30,40))
-        self.image.fill(YELLOW)
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH//2, HEIGHT//2)
         self.pos = vec(WIDTH//2, HEIGHT//2)
@@ -37,8 +53,6 @@ class Player(pg.sprite.Sprite):
 
     def jump(self):
         self.vel.y = self.jumpHeight
-
-
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pg.sprite.Sprite.__init__(self)
@@ -47,4 +61,3 @@ class Platform(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    

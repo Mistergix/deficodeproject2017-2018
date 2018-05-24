@@ -3,6 +3,7 @@ TITLE = "Jumpy!"
 WIDTH = 500
 HEIGHT = 600
 FPS = 60
+SPRITESHEET = "spritesheet_jumper.png"
 
 # Player properties
 PLAYER_ACC = 0.5

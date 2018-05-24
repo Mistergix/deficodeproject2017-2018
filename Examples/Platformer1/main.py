@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 import random
 from settings import *
 from sprites import *
@@ -13,6 +14,12 @@ class Game:
         self.running = True
         self.font_name = pg.font.match_font("arial")
         self.bgcolor = LIGHTBLUE
+        self.load_data()
+
+    def load_data(self):
+        self.dir = os.path.dirname(__file__)
+        data_dir = os.path.join(self.dir, 'data')
+        self.spritesheet = Spritesheet(os.path.join(data_dir, SPRITESHEET))
 
     def _add_platform(self, x, y, w, h):
         p = Platform(x,y,w,h)
@@ -27,7 +34,8 @@ class Game:
         self.platforms = pg.sprite.Group()
 
         # CREATE THE PLAYER
-        self.player = Player()
+        player_image = self.spritesheet.get_image(614, 1063, 120, 191)
+        self.player = Player(player_image)
         self.all_sprites.add(self.player)
         # CREATE THE PLATFORMS
 
