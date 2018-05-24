@@ -49,6 +49,21 @@ class Game:
                 self.player.pos.y = hits[0].rect.top + 1
                 self.player.vel.y = 0
 
+        if self.player.rect.top <= HEIGHT//4:
+            vel = abs(self.player.vel.y)
+            self.player.pos.y += vel
+            for plat in self.platforms:
+                plat.rect.y += vel   
+                if plat.rect.top >= HEIGHT: # If the platform is down the screen, delete it
+                    plat.kill()
+                    # Add a new one 
+                    
+                    w = random.randrange(WIDTH//10, WIDTH//5)
+                    h = 20
+                    x = random.randrange(0, WIDTH - w)
+                    y = random.randrange(-h - 55, -h -10)
+                    self._add_platform(x, y, w, h)     
+
     def events(self):
         for ev in pg.event.get():
             if ev.type == pg.QUIT:
