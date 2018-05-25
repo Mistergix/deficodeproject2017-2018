@@ -22,8 +22,12 @@ class Game:
         data_dir = os.path.join(self.dir, 'data')
         self.spritesheet = ani.Spritesheet(os.path.join(data_dir, SPRITESHEET))
 
-    def _add_platform(self, x, y, w, h):
-        p = Platform(x,y,w,h)
+    def _add_platform(self, x, y):
+        frame = random.choice(self.platform_images)
+        anibuilder = ani.AnimationBuilder([frame], self.spritesheet)
+        animation = anibuilder.build()
+        animator = ani.Animator(animation)
+        p = Platform(animator,x,y)
         self.all_sprites.add(p)
         self.platforms.add(p)
         return p
@@ -45,9 +49,10 @@ class Game:
         self.player = Player(player_animator)
         self.all_sprites.add(self.player)
         # CREATE THE PLATFORMS
-
-        for plat in PLATFORM_LIST:
-            self._add_platform(*plat)
+        self.platform_images = [ani.Frame((0, 288, 380, 94)), ani.Frame((213, 1662, 201, 100))]
+        for plat in PLATFORM_LIST: 
+            x,y = plat
+            self._add_platform(x,y)
 
         self.run()
 
@@ -75,12 +80,10 @@ class Game:
                 if plat.rect.top >= HEIGHT: # If the platform is down the screen, delete it
                     plat.kill()
                     # Add a new one 
-                    
-                    w = random.randrange(WIDTH//10, WIDTH//5)
-                    h = 20
-                    x = random.randrange(0, WIDTH - w)
-                    y = random.randrange(-h - 55, -h -10)
-                    self._add_platform(x, y, w, h) 
+
+                    x = random.randrange(0, WIDTH)
+                    y = random.randrange(- 55, -10)
+                    self._add_platform(x, y) 
 
                     self.score += 10
 

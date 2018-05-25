@@ -51,14 +51,20 @@ class Player(pg.sprite.Sprite):
 
     def jump(self):
         self.vel.y = self.jumpHeight
+        self.jumping = True
 
     def animate(self):
         self.walking = (self.vel.x != 0)
+        
 
         if self.walking:
             image = self.animator.get_current_image(ani.Animation.WALK)
             if self.vel.x < 0:
                 image = pg.transform.flip(image, True, False)
+
+        if self.jumping:
+            self.jumping = False
+            image = self.animator.get_current_image(ani.Animation.JUMP)
         if not self.walking and not self.jumping:
             image = self.animator.get_current_image(ani.Animation.IDLE)
         
@@ -72,10 +78,9 @@ class Player(pg.sprite.Sprite):
 
 
 class Platform(pg.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, animator, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w,h))
-        self.image.fill(GREEN)
+        self.image = animator.idle_image
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

@@ -55,6 +55,9 @@ class AnimationBuilder:
         return self
 
     def build(self):
+        """
+        Returns Animation
+        """
         return Animation(self._image_dict)
     
 
