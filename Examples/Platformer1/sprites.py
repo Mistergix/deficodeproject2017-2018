@@ -1,28 +1,14 @@
 import pygame as pg
 
 from settings import *
+import animator as ani
 
 vec = pg.math.Vector2
 
-class Spritesheet:
-    # utility class for loading and parsing spritesheets
-    def __init__(self, filename):
-        self.sheet = pg.image.load(filename).convert()
-
-    def get_image(self, x, y, w, h):
-        """
-        Loads the image on the spritesheet, given its x, y coordinate and its width and height
-        """
-        image = pg.Surface((w,h))
-        image.blit(self.sheet, (0,0), (x,y,w,h))
-        image.set_colorkey(BLACK)
-        image = pg.transform.scale(image, (w//2, h//2))
-        return image
-
 class Player(pg.sprite.Sprite):
-    def __init__(self, image):
+    def __init__(self, animator):
         pg.sprite.Sprite.__init__(self)
-        self.image = image
+        self.image = animator.idle_image
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH//2, HEIGHT//2)
         self.pos = vec(WIDTH//2, HEIGHT//2)
@@ -30,7 +16,14 @@ class Player(pg.sprite.Sprite):
         self.acc = vec(0,0)
         self.jumpHeight = -20
 
+        # Animation 
+        self.animator = animator
+        self.walking = False
+        self.jumping = False
+
+
     def update(self):
+        self.animate()
         self.acc = vec(0,PLAYER_GRAV)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
@@ -41,18 +34,43 @@ class Player(pg.sprite.Sprite):
         self.acc.x += self.vel.x * PLAYER_FRICTION
 
         self.vel += self.acc
+        if abs(self.vel.x) < 0.1:
+            self.vel.x = 0
         self.pos += self.vel + 0.5 * self.acc
 
-        if self.pos.x > WIDTH:
-            self.pos.x = 0
-        if self.pos.x < 0 :
-            self.pos.x = WIDTH
+        w = self.rect.width // 2
+        if self.pos.x > WIDTH + w:
+            self.pos.x = -w
+        if self.pos.x < -w :
+            self.pos.x = WIDTH + w
 
 
         self.rect.midbottom = self.pos
 
+        
+
     def jump(self):
         self.vel.y = self.jumpHeight
+
+    def animate(self):
+        self.walking = (self.vel.x != 0)
+
+        if self.walking:
+            image = self.animator.get_current_image(ani.Animation.WALK)
+            if self.vel.x < 0:
+                image = pg.transform.flip(image, True, False)
+        if not self.walking and not self.jumping:
+            image = self.animator.get_current_image(ani.Animation.IDLE)
+        
+        self._update_image(image)
+
+    def _update_image(self, image):
+        self.image = image
+        bottom = self.rect.bottom
+        self.rect = self.image.get_rect()
+        self.rect.bottom = bottom
+
+
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pg.sprite.Sprite.__init__(self)
