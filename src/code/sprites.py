@@ -186,9 +186,9 @@ class Ennemi(Cible):
         Cible.update(self)  # On appelle le update de la super classe
         distance = self.position.distance_to(self.target.position)
         if ... : # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
-            self.Attaquer(target)
+            self.Attaquer(self.target)
         else :
-            self.BougerVers(target)
+            self.BougerVers(self.target)
         self.rect.midbottom = self.position
 
     def Attaquer(self, player):
@@ -196,6 +196,9 @@ class Ennemi(Cible):
         pass
 
     def TakeDamage(self, degat):
+        pass
+
+    def BougerVers(self, target):
         pass
 
 #########################################################################################
