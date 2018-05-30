@@ -71,7 +71,7 @@ class Weapon1(Weapon):
 #############################################################################################
 class Player(Cible):
     def __init__(self, animator):
-        Cible.__init__(animator, ...) # Le joueur doit-être mobile
+        Cible.__init__(animator, True) # Le joueur doit-être mobile
         assert type(item) is PlayerItem
         
         self.position = vec(0,0)
@@ -83,30 +83,30 @@ class Player(Cible):
         if self.selected and not self.occupe: # Le joueur est le joueur actif et n'est pas occupé par un grappin
             keys = pg.key.get_pressed()
             if keys[pg.K_q] : # TOUCHE q PRESSSEE
-                ... # Le joueur va à gauche
-            elif keys[...] : # TOUCHE d PRESSEE
-                ... # Le joueur va à droite
-            elif keys[...] : # TOUCHE espace PRESSEE
-                ... # Action2 du joueur
+                self.pos += vec(-10, 0) # Le joueur va à gauche
+            elif keys[pg.K_d] : # TOUCHE d PRESSEE
+                self.pos += vec(10, 0) # Le joueur va à droite
+            elif keys[pg.K_SPACE] : # TOUCHE espace PRESSEE
+                self.Action2()
 
         if self.occupe: # Le joueur est occupé par un grappin
             self.UpdateGrappin()
 
-        self.rect.midbottom = ... # Position du joueur
+        self.rect.midbottom = self.position # Position du joueur
 
 
     def UpdateGrappin(self):
-        if self.attire != ... or self.attireur != ... : # On vérifie qu'un des deux (attire ou attireur) n'est pas None
+        if self.attire != None or self.attireur != None : # On vérifie qu'un des deux (attire ou attireur) n'est pas None
             if self.attire != None: # Le joueur est l'attireur
                 attire = self.attire
                 attireur = self
-            elif self.attireur != ... : # Le joueur est attiré
-                attire = ...
-                attireur = ...
+            elif self.attireur != None : # Le joueur est attiré
+                attire = self
+                attireur = self.attireur
 
             collided = pg.sprite.spritecollide(attire, [attireur], False) # On vérifie si l'attireur et l'attiré ont collisioné
 
-            if ... : # Les deux ont collisioné
+            if len(collided) > 0 : # Les deux ont collisioné
                 attireur.Reset() # Le joueur n'est plus occupé
                 attire.Reset() # Ni la cible
             else:
@@ -117,12 +117,12 @@ class Player(Cible):
                     if y1 < y2 : # L'attiré est en bas de l'attireur
                         attire.position += vec(-self.traction, -self.traction)
                     else:
-                        attire.position += vec(..., ...)
+                        attire.position += vec(-self.traction, self.traction)
                 else:
                     if y1 < y2:
-                        attire.position += vec(..., ...)
+                        attire.position += vec(self.traction, -self.traction)
                     else:
-                        attire.position += vec(..., ...)
+                        attire.position += vec(self.traction, self.traction)
 
     def Action1(self, cible):
         pass
@@ -138,24 +138,24 @@ class Player1(Player):
         grappinAnimator = None
         Player.__init__(self, animator)
         self.grappin = Grappin1(grappinAnimator)
-        self.selected = ... # Joueur 1 doit être selectionné
+        self.selected = True # Joueur 1 doit être selectionné
         self.jumpHeight = -20
         self.isOnGround = True # Permet de savoir si le joueur touche le sol
 
     def Action1(self, cible):
         assert type(cible) is Cible
-        if ... : # La cible est-elle mobile ?
-            attireur = ...
-            attire = ...
+        if cible.mobile : # La cible est-elle mobile ?
+            attireur = self
+            attire = cible
         else:
-            ... = ...
-            ... = ...
+            attireur = cible
+            attire = self
 
-        self.grappin.Attirer(..., ...)
+        self.grappin.Attirer(attireur, attire)
 
     def Action2(self): # Sauter
-        if ... : # Le joueur touche-t-il le sol ?
-            self.position += vec(0, ...) # On rajoute jumpHeight à l'ordonnée du joueur
+        if self.isOnGround : # Le joueur touche-t-il le sol ?
+            self.position += vec(0, self.jumpHeight) # On rajoute jumpHeight à l'ordonnée du joueur
 
 
 class Player2(Player):
@@ -169,7 +169,7 @@ class Player2(Player):
     def Action1(self, cible): # Attaque
         assert type(cible) is Ennemi
         distance = cible.position.distance_to(self.position)
-        if ... : # La distance entre l'ennemi et le joueur est inférieure à la portée de l'arme (utiliser la fonction valeur absolue abs)
+        if distance <  self.weapon.portee : # La distance entre l'ennemi et le joueur est inférieure à la portée de l'arme 
             cible.TakeDamage(self.weapon.degat)
 
     def Action2(self): # Défense
@@ -178,18 +178,18 @@ class Player2(Player):
 class Ennemi(Cible):
     def __init__(self, animator, HP, degat, portee, target):
         Cible.__init__(self, animator, ...) # L'ennemi doit-être mobile
-        self.HP = ...
-        self.degat = ...
-        self.portee = ... 
-        self.target = ... # La cible de l'ennemi
+        self.HP = HP
+        self.degat = degat
+        self.portee = portee 
+        self.target = target # La cible de l'ennemi
 
     def update(self):
         Cible.update(self)  # On appelle le update de la super classe
         distance = self.position.distance_to(self.target.position)
-        if ... : # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
-            self.Attaquer(target)
+        if distance < self.portee : # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
+            self.Attaquer(self.target)
         else :
-            self.BougerVers(target)
+            self.BougerVers(self.target)
         self.rect.midbottom = self.position
 
     def Attaquer(self, player):
