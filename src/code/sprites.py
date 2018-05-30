@@ -70,7 +70,7 @@ class Weapon1(Weapon):
 #############################################################################################
 class Player(Cible):
     def __init__(self, animator):
-        Cible.__init__(animator, ...) # Le joueur doit-être mobile
+        Cible.__init__(self, animator, ...) # Le joueur doit-être mobile
         assert type(item) is PlayerItem
         
         self.position = vec(0,0)
