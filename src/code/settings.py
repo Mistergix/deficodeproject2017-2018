@@ -4,4 +4,7 @@ class Settings:
     FPS = 60
     SPRITESHEET = "spritesheet.png"
     TITLE = "Jeu déficode"
+
+
+    BLACK = (0,0,0)
     
