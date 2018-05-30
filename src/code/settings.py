@@ -3,4 +3,5 @@ class Settings:
     HEIGHT = 600
     FPS = 60
     SPRITESHEET = "spritesheet.png"
+    TITLE = "Jeu déficode"
     
