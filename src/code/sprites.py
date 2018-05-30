@@ -62,7 +62,7 @@ class Weapon(PlayerItem):
     def __init__(self, animator, degat, portee):
         PlayerItem.__init__(self, animator)
         self.degat = degat
-        self.portee
+        self.portee = ...
 class Weapon1(Weapon):
     def __init__(self, animator):
         Weapon.__init__(self, animator, 20, 20)
