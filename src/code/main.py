@@ -41,7 +41,7 @@ class Game:
 
         for i in range(10):
             ennemi_stand = [ani.Frame((568, 1671, 122, 139))]
-            ennemi_animation = ani.Animation(ennemi_stand)
+            ennemi_animation = ani.Animation(self.spritesheet, ennemi_stand)
             ennemi_animator = ani.Animator(ennemi_animation)
             ennemi = Ennemi(ennemi_animator, 50, 10, 10, self.player1)
             self.all_sprites.add(ennemi)
