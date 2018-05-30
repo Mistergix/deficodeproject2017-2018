@@ -71,8 +71,7 @@ class Weapon1(Weapon):
 #############################################################################################
 class Player(Cible):
     def __init__(self, animator):
-        Cible.__init__(animator, True) # Le joueur doit-être mobile
-        assert type(item) is PlayerItem
+        Cible.__init__(self, animator, True) # Le joueur doit-être mobile
         
         self.position = vec(0,0)
         self.HP = 100
