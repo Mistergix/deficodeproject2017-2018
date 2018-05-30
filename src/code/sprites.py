@@ -10,16 +10,17 @@ class Cible(ani.Box):
     def __init__(self, animator, mobile):
         ani.Box.__init__(self, animator) # On initialise la super classe
         self.position = vec(0,0)
-        self.mobile = ... # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
+        self.mobile = mobile # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
         self.attire = None
         self.attireur = None
         self.occupe = False # La cible est elle en train d'être tirée (ou tire-t-elle) avec un grappin ?
         self.traction = 0 # De combien de pixels l'attiré bouge
 
     def Reset(self):
-        # On remet à None attire et attireur, occupe à False, traction à 0
-        ...
-        ...
+        self.attire = None
+        self.attireur = None
+        self.occupe = False # La cible est elle en train d'être tirée (ou tire-t-elle) avec un grappin ?
+        self.traction = 0 # De combien de pixels l'attiré bouge
 
     def update(self):
         self.Animate()
@@ -37,12 +38,12 @@ class Grappin(PlayerItem):
     def Attirer(self, attireur, attire):
         assert type(attire) is Cible
         assert type(attireur) is Cible
-        attire.attireur = ... # qui attire l'attiré ?
-        attireur.attire = ... # l'attireur attire qui ?
-        attireur.occupe = ... # L'attireur est occupé
-        attire.occupe = ... # L'attiré est occupé
+        attire.attireur = attireur # qui attire l'attiré ?
+        attireur.attire = attire # l'attireur attire qui ?
+        attireur.occupe = True # L'attireur est occupé
+        attire.occupe = True # L'attiré est occupé
         attire.traction = self.traction
-        attireur.traction = ...
+        attireur.traction = self.traction
         
 
 class Grappin1(Grappin):
