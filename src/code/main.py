@@ -27,8 +27,8 @@ class Game:
         player1_stand = [ani.Frame((614, 1063, 120, 191))]
         player2_stand = [ani.Frame((581, 1265, 121, 191))]
 
-        player1_animation = ani.Animation(player1_stand)
-        player2_animation = ani.Animation(player2_stand)
+        player1_animation = ani.Animation(self.spritesheet, player1_stand)
+        player2_animation = ani.Animation(self.spritesheet, player2_stand)
 
         player1_animator = ani.Animator(player1_animation)
         player2_animator = ani.Animator(player2_animation)
