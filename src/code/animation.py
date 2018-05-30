@@ -13,8 +13,8 @@ class Frame:
     """
     Emile : - Crée la méthode __init__, elle contient les 4 coordonnées ci-dessus
     """
-    def __init__():
-        pass
+    def __init__(self, xywh):
+        self.xywh = xywh
 
 class Spritesheet:
     # Cette classe stocke une image qui représente une spritesheet
@@ -26,11 +26,11 @@ class Spritesheet:
     def GetImage(self, frame):
         # La méthode GetImage prends un objet de type Frame en argument et, en utilisant les coordonnées de l'objet Frame, renvoit le sprite associé
         assert type(frame) is Frame # On vérifie que l'objet est bien une Frame
-        x,y,w,h = ...
+        x,y,w,h = frame.xywh
         image = pg.Surface((w,h)) # Crée une image transparente
         image.blit(self.sheet, (0,0), (x,y,w,h)) # Colle sur cette image le sprite issu de la spritesheet
         image = pg.transform.scale(image, (w//2, h//2)) # Divise par 2 sa taille
-        return ...
+        return image
 
 class Animation:
     # Stocke toutes les animations d'un sprite
@@ -45,26 +45,26 @@ class Animation:
     JUMP = "jump"
 
     def __init__(self, spritesheet, stand_frame_list):
-        self.spritesheet = ...
-        self.image_dict = ... # DICTIONNAIRE VIDE
-        self.frame_dict = ... # Dictionnaire vide
-        self.AddAnimation(Animation.STAND, ...) # On rajoute l'animation quand l'objet est immobile
+        self.spritesheet = spritesheet
+        self.image_dict = dict() # DICTIONNAIRE VIDE
+        self.frame_dict = dict() # Dictionnaire vide
+        self.AddAnimation(Animation.STAND, stand_frame_list) # On rajoute l'animation quand l'objet est immobile
 
     """
     Emile : - Complète AddAnimation et GetCurrentFrame
     """
     def AddAnimation(self, key, frame_list):
         assert len(frame_list) > 0, "Il doit y avoir au moins un élément dans la liste"
-        image_list = ... # Liste vide
+        image_list = []] # Liste vide
         for frame in frame_list:
-            image = ... # On utilise la méthode GetImage de self.spritesheet en passant frame en argument
-            ... # On ajoute l'image dans la liste image_list
-        self.frame_dict[key] = ... # On met l'image actuelle à 0
-        ... = image_list # On met cette liste d'images dans image_dict
+            image = self.spritesheet.GetImage(frame) # On utilise la méthode GetImage de self.spritesheet en passant frame en argument
+            image_list.append(image) # On ajoute l'image dans la liste image_list
+        self.frame_dict[key] = 0 # On met l'image actuelle à 0
+        self.image_dict[key]= image_list # On met cette liste d'images dans image_dict
 
     def GetCurrentFrame(self, key):
         assert key in self.frame_dict, "L'animation n'existe pas"
-        return ... # Etant donné une clé, il faut renvoyer l'entier correspondant à cette clé dans frame_dict 
+        return self.frame_dict[key] # Etant donné une clé, il faut renvoyer l'entier correspondant à cette clé dans frame_dict 
 
     def __getitem__(self, key):
         # Permet d'accéder aux listes d'images comme ceci : 
@@ -78,16 +78,16 @@ class Animator:
     """
     def __init__(self, animation):
         assert type(animation) is Animation
-        self.animation = ...
-        self.image = ... # On récupère la première image de l'animation STAND, en utilisant self.animation
+        self.animation = animation
+        self.image = self.animation.image_dict[Animation.STAND][0] # On récupère la première image de l'animation STAND, en utilisant self.animation
         self.last_update = pg.time.get_ticks() # Permet de savoir quand l'objet a été animé pour la dernière fois
         self.update_time = 350 # Au bout de combien de temps on anime l'objet (plus le nombre est petit, plus l'objet sera animé vite)
 
 
     def NextFrame(self, key):
-        longueur = ... # Longueur de la liste d'image correspondant à cette clé, utilise self.animation
-        ... # rajoute 1 à l'entier se trouvant dans le dictionnaire de frame de self.animation
-        self.anims._frame_dict[key] %= longueur # On s'assure que l'entier ne dépasse pas la taille de la liste
+        longueur = len(self.animation.image_dict[key]) # Longueur de la liste d'image correspondant à cette clé, utilise self.animation
+        self.animation.frame_dict[key] += 1 # rajoute 1 à l'entier se trouvant dans le dictionnaire de frame de self.animation
+        self.animation._frame_dict[key] %= longueur # On s'assure que l'entier ne dépasse pas la taille de la liste
         return self.anims._frame_dict[key]
 
     def NextImage(self, key):

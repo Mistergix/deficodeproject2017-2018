@@ -199,4 +199,7 @@ class Ennemi(Cible):
     def TakeDamage(self, degat):
         pass
 
+    def BougerVers(self, player):
+        pass
+
 #########################################################################################
