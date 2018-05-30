@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from sprites import *
 import animation as ani
 from settings import Settings
@@ -21,7 +22,7 @@ class Game:
 
     def Launch(self):
         self.all_sprites = pg.sprite.Group() # Une liste de sprites
-        self.ennemies = ... # Une autre
+        self.ennemies = pg.sprite.Group() # Une autre
 
         player1_stand = [ani.Frame((614, 1063, 120, 191))]
         player2_stand = [ani.Frame((581, 1265, 121, 191))]

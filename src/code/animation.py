@@ -55,7 +55,7 @@ class Animation:
     """
     def AddAnimation(self, key, frame_list):
         assert len(frame_list) > 0, "Il doit y avoir au moins un élément dans la liste"
-        image_list = []] # Liste vide
+        image_list = [] # Liste vide
         for frame in frame_list:
             image = self.spritesheet.GetImage(frame) # On utilise la méthode GetImage de self.spritesheet en passant frame en argument
             image_list.append(image) # On ajoute l'image dans la liste image_list
