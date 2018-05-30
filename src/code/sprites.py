@@ -48,7 +48,7 @@ class Grappin(PlayerItem):
 
 class Grappin1(Grappin):
     def __init__(self, animator):
-        Grappin.__init__(animator, 50, 10)
+        Grappin.__init__(self, animator, 50, 10)
 #################################################################################################
 class Bouclier(PlayerItem):
     def __init__(self, animator, resistance):

@@ -100,6 +100,7 @@ class Animator:
 
         # Rappel : frame ici est un entier
         return self.animation.image_dict[key][frame] # On renvoit la bonne image (grâce à l'entier frame) de la bonne liste (grâce à key) du dictionnaire image_dict
+        
 
 class Box(pg.sprite.Sprite):
     # Représente l'image de l'objet et ses animations
