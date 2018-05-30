@@ -88,18 +88,18 @@ class Animator:
         longueur = len(self.animation.image_dict[key]) # Longueur de la liste d'image correspondant à cette clé, utilise self.animation
         self.animation.frame_dict[key] += 1 # rajoute 1 à l'entier se trouvant dans le dictionnaire de frame de self.animation
         self.animation._frame_dict[key] %= longueur # On s'assure que l'entier ne dépasse pas la taille de la liste
-        return self.anims._frame_dict[key]
+        return self.animation._frame_dict[key]
 
     def NextImage(self, key):
         now = pg.time.get_ticks()
-        if ... : # La différence entre now et last_update est supérieure à update_time
-            ... = now # on met last_update à now
-            frame = ... # On utilise NextFrame
+        if now - self.last_update > self.update_time : # La différence entre now et last_update est supérieure à update_time
+            self.last_update = now # on met last_update à now
+            frame = self.NextFrame(key) # On utilise NextFrame
         else:
-            frame = ... # On récupère la frame dans le dictionnaire frame_dict
+            frame = self.animation.frame_dict[key] # On récupère la frame dans le dictionnaire frame_dict
 
         # Rappel : frame ici est un entier
-        return ... # On renvoit la bonne image (grâce à l'entier frame) de la bonne liste (grâce à key) du dictionnaire image_dict
+        return self.animation.image_dict[key][frame] # On renvoit la bonne image (grâce à l'entier frame) de la bonne liste (grâce à key) du dictionnaire image_dict
 
 class Box(pg.sprite.Sprite):
     # Représente l'image de l'objet et ses animations

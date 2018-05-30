@@ -7,11 +7,11 @@ from settings import Settings
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = ... # Crée un écran pygame de taille Settings.WIDTH x Settings.HEIGHT
-        ... # Donner Settings.TITLE en tire à la fenêtre
-        self.clock = ... # Un objet de type Clock
-        self.running = ... # Le jeu doit tourner
-        self.bgcolor = ... # Black
+        self.screen = pg.display.set_mode((Settings.WIDTH, Settings.HEIGHT)) # Crée un écran pygame de taille Settings.WIDTH x Settings.HEIGHT
+        pg.display.set_caption(Settings.TITLE) # Donner Settings.TITLE en tire à la fenêtre
+        self.clock = pg.time.Clock() # Un objet de type Clock
+        self.running = True # Le jeu doit tourner
+        self.bgcolor = Settings.BLACK # Black
         self.LoadData()
 
     def LoadData(self):
