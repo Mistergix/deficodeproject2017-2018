@@ -87,8 +87,8 @@ class Animator:
     def NextFrame(self, key):
         longueur = ... # Longueur de la liste d'image correspondant à cette clé, utilise self.animation
         ... # rajoute 1 à l'entier se trouvant dans le dictionnaire de frame de self.animation
-        self.anims._frame_dict[key] %= longueur # On s'assure que l'entier ne dépasse pas la taille de la liste
-        return self.anims._frame_dict[key]
+        self.animation._frame_dict[key] %= longueur # On s'assure que l'entier ne dépasse pas la taille de la liste
+        return self.animation._frame_dict[key]
 
     def NextImage(self, key):
         now = pg.time.get_ticks()
