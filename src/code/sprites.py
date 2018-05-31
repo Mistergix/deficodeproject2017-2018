@@ -192,7 +192,7 @@ class Ennemi(Cible):
         self.rect.midbottom = self.position
 
     def Attaquer(self, player):
-        assert type(player) is Player
+        #assert type(player) is Player
         pass
 
     def TakeDamage(self, degat):

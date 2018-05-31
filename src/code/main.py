@@ -45,7 +45,7 @@ class Game:
             ennemi_animator = ani.Animator(ennemi_animation)
             ennemi = Ennemi(ennemi_animator, 50, 10, 10, self.player1)
             self.all_sprites.add(ennemi)
-            self.ennemies(ennemi)
+            self.ennemies.add(ennemi)
 
         self.Run()
 
