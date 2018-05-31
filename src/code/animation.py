@@ -1,4 +1,5 @@
 import pygame as pg
+from settings import *
 
 # Commentaires avec des # : Explications
 # Commentaires avec des """" : Consignes
@@ -108,7 +109,12 @@ class Box(pg.sprite.Sprite):
     def __init__(self, animator):
         pg.sprite.Sprite.__init__(self)
         self.animator = animator
-        self.image = animator.image
+        if animator == None:
+            self.image = pg.Surface((20,20))
+            self.image.fill(Settings.BLUE)
+
+        else :
+            self.image = animator.image
         self.rect = self.image.get_rect()
 
     def Animate(self):
