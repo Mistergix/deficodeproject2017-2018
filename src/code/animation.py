@@ -1,4 +1,5 @@
 import pygame as pg
+from settings import *
 
 # Commentaires avec des # : Explications
 # Commentaires avec des """" : Consignes
