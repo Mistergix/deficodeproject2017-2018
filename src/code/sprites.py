@@ -57,13 +57,13 @@ class Bouclier(PlayerItem):
 
 class Bouclier1(Bouclier):
     def __init__(self, animator):
-        Bouclier.__init__(animator, 10)
+        Bouclier.__init__(self, animator, 10)
 ###############################################################################################
 class Weapon(PlayerItem):
     def __init__(self, animator, degat, portee):
         PlayerItem.__init__(self, animator)
         self.degat = degat
-        self.portee
+        self.portee = portee
 class Weapon1(Weapon):
     def __init__(self, animator):
         Weapon.__init__(self, animator, 20, 20)
