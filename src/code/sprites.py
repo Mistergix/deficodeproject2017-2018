@@ -9,7 +9,7 @@ vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des ob
 class Cible(ani.Box):
     def __init__(self, animator, mobile):
         ani.Box.__init__(self, animator) # On initialise la super classe
-        self.position = vec(0,0)
+        self.position = vec(...,...) #Aleatoirement sur l'ecran
         self.mobile = ... # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
         self.attire = None
         self.attireur = None
@@ -73,7 +73,7 @@ class Player(Cible):
         Cible.__init__(self, animator, ...) # Le joueur doit-être mobile
         assert type(item) is PlayerItem
         
-        self.position = vec(0,0)
+        self.position = vec(...,...) # centre de l'écran
         self.HP = 100
         self.selected = False # Le joueur est-il joueur 1 ?
 
