@@ -3,8 +3,6 @@ import os
 from sprites import *
 import animation as ani
 from settings import Settings
-
-
 class Game:
     def __init__(self):
         pg.init()

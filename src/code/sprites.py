@@ -1,4 +1,6 @@
 import pygame as pg
+from settings import *
+import random
 import animation as ani
 
 vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des objets
@@ -9,7 +11,7 @@ vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des ob
 class Cible(ani.Box):
     def __init__(self, animator, mobile):
         ani.Box.__init__(self, animator) # On initialise la super classe
-        self.position = vec(0,0)
+        self.position = vec(random.randint(0,Settings.WIDTH-50),random.randint(0,Settings.HEIGHT-50))
         self.mobile = mobile # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
         self.attire = None
         self.attireur = None
@@ -73,7 +75,7 @@ class Player(Cible):
     def __init__(self, animator):
         Cible.__init__(self, animator, True) # Le joueur doit-être mobile
         
-        self.position = vec(0,0)
+        self.position = vec(Settings.WIDTH//2, Settings.HEIGHT//2)
         self.HP = 100
         self.selected = False # Le joueur est-il joueur 1 ?
 
@@ -82,9 +84,9 @@ class Player(Cible):
         if self.selected and not self.occupe: # Le joueur est le joueur actif et n'est pas occupé par un grappin
             keys = pg.key.get_pressed()
             if keys[pg.K_q] : # TOUCHE q PRESSSEE
-                self.pos += vec(-10, 0) # Le joueur va à gauche
+                self.position += vec(-10, 0) # Le joueur va à gauche
             elif keys[pg.K_d] : # TOUCHE d PRESSEE
-                self.pos += vec(10, 0) # Le joueur va à droite
+                self.position += vec(10, 0) # Le joueur va à droite
             elif keys[pg.K_SPACE] : # TOUCHE espace PRESSEE
                 self.Action2()
 
