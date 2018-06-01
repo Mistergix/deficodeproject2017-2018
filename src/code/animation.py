@@ -14,9 +14,10 @@ class Frame:
     """
     Emile : - Crée la méthode __init__, elle contient les 4 coordonnées ci-dessus
     """
-    def __init__():
-        pass
-
+    def __init__(self, xywh):
+        self.xywh = xywh
+        
+        
 class Spritesheet:
     # Cette classe stocke une image qui représente une spritesheet
     def __init__(self, filepath):
@@ -27,11 +28,11 @@ class Spritesheet:
     def GetImage(self, frame):
         # La méthode GetImage prends un objet de type Frame en argument et, en utilisant les coordonnées de l'objet Frame, renvoit le sprite associé
         assert type(frame) is Frame # On vérifie que l'objet est bien une Frame
-        x,y,w,h = ...
+        x,y,w,h = frame.xywh
         image = pg.Surface((w,h)) # Crée une image transparente
         image.blit(self.sheet, (0,0), (x,y,w,h)) # Colle sur cette image le sprite issu de la spritesheet
         image = pg.transform.scale(image, (w//2, h//2)) # Divise par 2 sa taille
-        return ...
+        return image
 
 class Animation:
     # Stocke toutes les animations d'un sprite
