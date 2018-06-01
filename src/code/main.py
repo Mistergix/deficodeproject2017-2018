@@ -8,12 +8,13 @@ from settings import Settings
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = ... # Crée un écran pygame de taille Settings.WIDTH x Settings.HEIGHT
-        ... # Donner Settings.TITLE en tire à la fenêtre
-        self.clock = ... # Un objet de type Clock
-        self.running = ... # Le jeu doit tourner
-        self.bgcolor = ... # Black
+        self.screen = pg.display.set_mode((Settings.WIDTH, Settings.HEIGHT)) # Crée un écran pygame de taille Settings.WIDTH x Settings.HEIGHT
+        pg.display.set_caption(Settings.TITLE) # Donner Settings.TITLE en tire à la fenêtre
+        self.clock = pg.time.Clock() # Un objet de type Clock
+        self.running = True # Le jeu doit tourner
+        self.bgcolor = Settings.BLACK # Black
         self.LoadData()
+        self.selectedPlayer = self.player1
 
     def LoadData(self):
         self.dir = os.path.dirname(__file__)
@@ -22,7 +23,7 @@ class Game:
 
     def Launch(self):
         self.all_sprites = pg.sprite.Group() # Une liste de sprites
-        self.ennemies = ... # Une autre
+        self.ennemies = pg.ennemy.Group() # Une autre
 
         player1_stand = [ani.Frame((614, 1063, 120, 191))]
         player2_stand = [ani.Frame((581, 1265, 121, 191))]
@@ -60,6 +61,13 @@ class Game:
         for ev in pg.event.get():
             if ev.type == pg.QUIT:
                 self.running = False
+            if ev.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1 :
+            
+            elif ev.type == KEYDOWN :
+                key = ev.key
+                if key == pg.K_f :
+                    self.SwitchPlayer()
 
     def Update(self):
         self.all_sprites.update()
@@ -69,6 +77,20 @@ class Game:
         self.all_sprites.draw(self.screen)
         #######
         pg.display.flip()
+        
+    
+    def SwitchPlayer():
+        if self.selectedPlayer == self.player1 :
+            old = self.player1
+            new = self.player2
+        
+        else :
+            old = self.player2
+            new = self.player1
+        
+        old.selected = False
+        new.selected = True
+        self.selectedPlayer = new
 
         
 g = Game()
