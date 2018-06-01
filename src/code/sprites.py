@@ -37,12 +37,12 @@ class Grappin(PlayerItem):
     def Attirer(self, attireur, attire):
         assert type(attire) is Cible
         assert type(attireur) is Cible
-        attire.attireur = ... # qui attire l'attiré ?
-        attireur.attire = ... # l'attireur attire qui ?
-        attireur.occupe = ... # L'attireur est occupé
-        attire.occupe = ... # L'attiré est occupé
+        attire.attireur = attireur # qui attire l'attiré ?
+        attireur.attire = attire # l'attireur attire qui ?
+        attireur.occupe = True # L'attireur est occupé
+        attire.occupe = True # L'attiré est occupé
         attire.traction = self.traction
-        attireur.traction = ...
+        attireur.traction = self.traction
         
 
 class Grappin1(Grappin):
@@ -62,7 +62,7 @@ class Weapon(PlayerItem):
     def __init__(self, animator, degat, portee):
         PlayerItem.__init__(self, animator)
         self.degat = degat
-        self.portee = ...
+        self.portee = portee
 class Weapon1(Weapon):
     def __init__(self, animator):
         Weapon.__init__(self, animator, 20, 20)
@@ -202,3 +202,4 @@ class Ennemi(Cible):
         pass
 
 #########################################################################################
+
