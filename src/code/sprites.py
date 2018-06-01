@@ -176,16 +176,18 @@ class Player2(Player):
 ########################################################################################
 class Ennemi(Cible):
     def __init__(self, animator, HP, degat, portee, target):
-        Cible.__init__(self, animator, ...) # L'ennemi doit-être mobile
-        self.HP = ...
-        self.degat = ...
-        self.portee = ... 
-        self.target = ... # La cible de l'ennemi
+        Cible.__init__(self, animator,mobile) 
+        self.portee =portee 
+        self.target = target # La cible de l'ennemi 
+        self.HP=HP
+        self.degat =degat
+        self.target=target
 
     def update(self):
         Cible.update(self)  # On appelle le update de la super classe
         distance = self.position.distance_to(self.target.position)
-        if ... : # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
+        if distance < portee :
+            Attaquer(self.target) # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
             self.Attaquer(self.target)
         else :
             self.BougerVers(self.target)
@@ -201,4 +203,20 @@ class Ennemi(Cible):
     def BougerVers(self, target):
         pass
 
+class Goblin(Ennemi):
+    def __init__(self,animator,target):
+        Ennemi.__init(self,animator,20 ,10 ,5 , target)
+
+
+class Skelet(Ennemi):
+    def __init__(self,animator,target):
+        Ennemi.__init(self,animator,62 ,35 ,10 , target)
+        
+class Spider(Ennemi):
+    def __init__(self,animator,target):
+        Ennemi.__init(self,animator,31 ,18,7 , target)
+
+class Orc(Ennemi):
+    def __init__(self,animator,target):
+        Ennemi.__init(self,animator,90,61,10 , target)    
 #########################################################################################
