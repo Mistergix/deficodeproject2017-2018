@@ -5,9 +5,6 @@ import animation as ani
 from settings import Settings
 
 
-# BONJOUR LES ZMIS
-
-
 class Game:
     def __init__(self):
         pg.init()
