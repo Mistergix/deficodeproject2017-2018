@@ -18,3 +18,5 @@ Pour créer sprite sheets : https://www.codeandweb.com/sprite-sheet-maker
 
 Map parser :
 + https://www.youtube.com/watch?v=1Fo-5vJcB4w
++ https://gamedevelopment.tutsplus.com/tutorials/introduction-to-tiled-map-editor-a-platform-agnostic-tool-for-level-maps--gamedev-2838
++ https://gamedevelopment.tutsplus.com/tutorials/parsing-and-rendering-tiled-tmx-format-maps-in-your-own-game-engine--gamedev-3104
