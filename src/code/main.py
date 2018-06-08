@@ -12,6 +12,7 @@ class Game:
         self.running = True # Le jeu doit tourner
         self.bgcolor = Settings.BLACK # Black
         self.LoadData()
+        
 
     def LoadData(self):
         self.dir = os.path.dirname(__file__)
@@ -44,7 +45,7 @@ class Game:
             ennemi = Ennemi(ennemi_animator, 50, 10, 10, self.player1)
             self.all_sprites.add(ennemi)
             self.ennemies.add(ennemi)
-
+        self.selectedPlayer = self.player1
         self.Run()
 
     def Run(self):
@@ -58,6 +59,10 @@ class Game:
         for ev in pg.event.get():
             if ev.type == pg.QUIT:
                 self.running = False
+            elif ev.type == pg.KEYDOWN :
+                key = ev.key
+                if key == pg.K_f :
+                    self.SwitchPlayer()
 
     def Update(self):
         self.all_sprites.update()
@@ -67,6 +72,19 @@ class Game:
         self.all_sprites.draw(self.screen)
         #######
         pg.display.flip()
+
+    def SwitchPlayer(self):
+        if self.selectedPlayer == self.player1 :
+            old = self.player1
+            new = self.player2
+        
+        else :
+            old = self.player2
+            new = self.player1
+        
+        old.selected = False
+        new.selected = True
+        self.selectedPlayer = new
 
         
 g = Game()
