@@ -103,11 +103,19 @@ class Animator:
         return self.animation.image_dict[key][frame] # On renvoit la bonne image (grâce à l'entier frame) de la bonne liste (grâce à key) du dictionnaire image_dict
         
 
+"""
+Emile : - COmplète Box
+"""
 class Box(pg.sprite.Sprite):
     # Représente l'image de l'objet et ses animations
     # Tout objet qui va être dessiné à l'écran, devra hériter de Box
     def __init__(self, animator):
         pg.sprite.Sprite.__init__(self)
+        if ... : # SI animator est None
+            self.image = pg.Surface((50,50))
+            self.image.fill(...) # On remplit le rectangle de bleu
+        else :
+            self.image = animator.image
         self.animator = animator
         if animator == None:
             self.image = pg.Surface((20,20))

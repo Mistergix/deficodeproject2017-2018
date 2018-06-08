@@ -11,8 +11,13 @@ vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des ob
 class Cible(ani.Box):
     def __init__(self, animator, mobile):
         ani.Box.__init__(self, animator) # On initialise la super classe
+<<<<<<< HEAD
         self.position = vec(random.randint(0,Settings.WIDTH-50),random.randint(0,Settings.HEIGHT-50))
         self.mobile = mobile # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
+=======
+        self.position = vec(...,...) #Aleatoirement sur l'ecran
+        self.mobile = ... # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
+>>>>>>> master
         self.attire = None
         self.attireur = None
         self.occupe = False # La cible est elle en train d'être tirée (ou tire-t-elle) avec un grappin ?
