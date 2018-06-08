@@ -11,12 +11,15 @@ vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des ob
 class Cible(ani.Box):
     def __init__(self, animator, mobile):
         ani.Box.__init__(self, animator) # On initialise la super classe
-        self.position = vec(random.randint(0,Settings.WIDTH-50),random.randint(0,Settings.HEIGHT-50))
+        self.position = vec(0,0)
+        self.velocity = vec(0,0)
+        self.acceleration = vec(0,0)
         self.mobile = mobile # La cible est-elle un objet mouvant(joueur, ennemi) ou inanimé (plateforme)
         self.attire = None
         self.attireur = None
         self.occupe = False # La cible est elle en train d'être tirée (ou tire-t-elle) avec un grappin ?
         self.traction = 0 # De combien de pixels l'attiré bouge
+        self.isOnGround = True # Permet de savoir si le joueur touche le sol
 
     def Reset(self):
         self.attire = None
@@ -24,8 +27,14 @@ class Cible(ani.Box):
         self.occupe = False # La cible est elle en train d'être tirée (ou tire-t-elle) avec un grappin ?
         self.traction = 0 # De combien de pixels l'attiré bouge
 
-    def update(self):
+    def update(self, g):
         self.Animate()
+        if self.mobile and not self.isOnGround:
+            self.acceleration = vec(0,g)
+        else:
+            self.acceleration = vec(0,0)
+
+
 ################################################################################################
 class PlayerItem(ani.Box):
     def __init__(self, animator):
@@ -74,29 +83,35 @@ class Weapon1(Weapon):
 class Player(Cible):
     def __init__(self, animator):
         Cible.__init__(self, animator, True) # Le joueur doit-être mobile
-        
-        self.position = vec(Settings.WIDTH//2, Settings.HEIGHT//2)
         self.HP = 100
         self.selected = False # Le joueur est-il joueur 1 ?
+        self.feet = pg.Rect(0,0,self.rect.width* 0.5, 8)
+        self.speed = 10
 
-    def update(self):
-        Cible.update(self) # On appelle le update de la super classe
+    def update(self, dt, g):
+        Cible.update(self, g) # On appelle le update de la super classe
         if self.selected and not self.occupe: # Le joueur est le joueur actif et n'est pas occupé par un grappin
             keys = pg.key.get_pressed()
             if keys[pg.K_q] : # TOUCHE q PRESSSEE
-                self.position += vec(-10, 0) # Le joueur va à gauche
+                self.acceleration += vec(-self.speed, 0) # Le joueur va à gauche
             elif keys[pg.K_d] : # TOUCHE d PRESSEE
-                self.position += vec(10, 0) # Le joueur va à droite
+                self.acceleration += vec(self.speed, 0) # Le joueur va à droite
             elif keys[pg.K_SPACE] : # TOUCHE espace PRESSEE
                 self.Action2()
 
         if self.occupe: # Le joueur est occupé par un grappin
-            self.UpdateGrappin()
-
+            self.UpdateGrappin(dt)
+        self.velocity += self.acceleration
+        if abs(self.velocity.x) < 0.1:
+            self.velocity.x = 0
+        if abs(self.velocity.y) < 0.1:
+            self.velocity.y = 0
+        self.position += self.velocity * dt - self.acceleration * dt * dt / 2
         self.rect.midbottom = self.position # Position du joueur
+        self.feet.midbottom = self.rect.midbottom
 
 
-    def UpdateGrappin(self):
+    def UpdateGrappin(self, dt):
         if self.attire != None or self.attireur != None : # On vérifie qu'un des deux (attire ou attireur) n'est pas None
             if self.attire != None: # Le joueur est l'attireur
                 attire = self.attire
@@ -116,14 +131,14 @@ class Player(Cible):
 
                 if x1 < x2 : # L'attiré est à droite de l'attireur
                     if y1 < y2 : # L'attiré est en bas de l'attireur
-                        attire.position += vec(-self.traction, -self.traction)
+                        attire.position += vec(-self.traction, -self.traction) * dt
                     else:
-                        attire.position += vec(-self.traction, self.traction)
+                        attire.position += vec(-self.traction, self.traction) * dt
                 else:
                     if y1 < y2:
-                        attire.position += vec(self.traction, -self.traction)
+                        attire.position += vec(self.traction, -self.traction) * dt
                     else:
-                        attire.position += vec(self.traction, self.traction)
+                        attire.position += vec(self.traction, self.traction) * dt
 
     def Action1(self, cible):
         pass
@@ -140,8 +155,8 @@ class Player1(Player):
         Player.__init__(self, animator)
         self.grappin = Grappin1(grappinAnimator)
         self.selected = True # Joueur 1 doit être selectionné
-        self.jumpHeight = -20
-        self.isOnGround = True # Permet de savoir si le joueur touche le sol
+        self.jumpHeight = 2
+        
 
     def Action1(self, cible):
         assert type(cible) is Cible
@@ -156,7 +171,8 @@ class Player1(Player):
 
     def Action2(self): # Sauter
         if self.isOnGround : # Le joueur touche-t-il le sol ?
-            self.position += vec(0, self.jumpHeight) # On rajoute jumpHeight à l'ordonnée du joueur
+            u = -2 * self.acceleration.y * self.jumpHeight
+            self.velocity += vec(0, u) # On rajoute jumpHeight à l'ordonnée du joueur
 
 
 class Player2(Player):
@@ -178,14 +194,14 @@ class Player2(Player):
 ########################################################################################
 class Ennemi(Cible):
     def __init__(self, animator, HP, degat, portee, target):
-        Cible.__init__(self, animator, ...) # L'ennemi doit-être mobile
+        Cible.__init__(self, animator, True) # L'ennemi doit-être mobile
         self.HP = HP
         self.degat = degat
         self.portee = portee 
         self.target = target # La cible de l'ennemi
 
-    def update(self):
-        Cible.update(self)  # On appelle le update de la super classe
+    def update(self, dt, g):
+        Cible.update(self, g)  # On appelle le update de la super classe
         distance = self.position.distance_to(self.target.position)
         if distance < self.portee : # La distance entre l'ennemi et le joueur est inférieure à la portée (utiliser la fonction valeur absolue abs)
             self.Attaquer(self.target)

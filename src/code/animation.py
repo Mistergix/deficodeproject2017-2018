@@ -109,20 +109,14 @@ Emile : - COmplète Box
 class Box(pg.sprite.Sprite):
     # Représente l'image de l'objet et ses animations
     # Tout objet qui va être dessiné à l'écran, devra hériter de Box
-    def __init__(self, animator):
+    def __init__(self, animator=None, w=50, h=50):
         pg.sprite.Sprite.__init__(self)
         if animator == None : # SI animator est None
-            self.image = pg.Surface((50,50))
+            self.image = pg.Surface((w,h))
             self.image.fill(Settings.BLUE) # On remplit le rectangle de bleu
         else :
             self.image = animator.image
         self.animator = animator
-        if animator == None:
-            self.image = pg.Surface((20,20))
-            self.image.fill(Settings.BLUE)
-
-        else :
-            self.image = animator.image
         self.rect = self.image.get_rect()
 
     def Animate(self):

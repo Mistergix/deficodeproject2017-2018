@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextobjectid="2">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
  <tileset firstgid="1" source="grass.tsx"/>
  <tileset firstgid="73" source="tree2-final.tsx"/>
  <layer name="back" width="20" height="20">
@@ -19,5 +19,6 @@
  </layer>
  <objectgroup name="collision">
   <object id="1" x="255" y="445" width="125" height="62"/>
+  <object id="2" x="4" y="583" width="631" height="49"/>
  </objectgroup>
 </map>
