@@ -111,9 +111,9 @@ class Box(pg.sprite.Sprite):
     # Tout objet qui va être dessiné à l'écran, devra hériter de Box
     def __init__(self, animator):
         pg.sprite.Sprite.__init__(self)
-        if ... : # SI animator est None
+        if animator == None : # SI animator est None
             self.image = pg.Surface((50,50))
-            self.image.fill(...) # On remplit le rectangle de bleu
+            self.image.fill(Settings.BLUE) # On remplit le rectangle de bleu
         else :
             self.image = animator.image
         self.animator = animator
