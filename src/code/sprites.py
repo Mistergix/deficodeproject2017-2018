@@ -1,7 +1,7 @@
 import pygame as pg
 import animation as ani
 
-vec = pg.math.Vector2 # Un vecteur permettant de représenter la position des objets
+vec = pg.math.Vector2 # 
 
 # Commentaires avec des # : Explications
 # Commentaires avec des """" : Consignes
@@ -17,9 +17,8 @@ class Cible(ani.Box):
         self.traction = 0 # De combien de pixels l'attiré bouge
 
     def Reset(self):
-        # On remet à None attire et attireur, occupe à False, traction à 0
-        ...
-        ...
+        self.attireur = None
+        self.attire = None
 
     def update(self):
         self.Animate()
@@ -37,8 +36,8 @@ class Grappin(PlayerItem):
     def Attirer(self, attireur, attire):
         assert type(attire) is Cible
         assert type(attireur) is Cible
-        attire.attireur = ... # qui attire l'attiré ?
-        attireur.attire = ... # l'attireur attire qui ?
+        attire.attireur = attireur # qui attire l'attiré ?
+        attireur.attire = attire # l'attireur attire qui ?
         attireur.occupe = ... # L'attireur est occupé
         attire.occupe = ... # L'attiré est occupé
         attire.traction = self.traction
@@ -70,44 +69,44 @@ class Weapon1(Weapon):
 #############################################################################################
 class Player(Cible):
     def __init__(self, animator):
-        Cible.__init__(self, animator, ...) # Le joueur doit-être mobile
+        Cible.__init__(self, animator, mobile)
         assert type(item) is PlayerItem
         
-        self.position = vec(...,...) # centre de l'écran
+        self.position = vec(400, 300) 
         self.HP = 100
-        self.selected = False # Le joueur est-il joueur 1 ?
+        self.selected = False 
 
     def update(self):
-        Cible.update(self) # On appelle le update de la super classe
-        if self.selected and not self.occupe: # Le joueur est le joueur actif et n'est pas occupé par un grappin
+        Cible.update(self)
+        if self.selected and not self.occupe:
             keys = pg.key.get_pressed()
-            if keys[pg.K_q] : # TOUCHE q PRESSSEE
-                ... # Le joueur va à gauche
-            elif keys[...] : # TOUCHE d PRESSEE
-                ... # Le joueur va à droite
-            elif keys[...] : # TOUCHE espace PRESSEE
-                ... # Action2 du joueur
+            if keys[pg.K_q] : 
+                self.position -= vec(10,0)
+            elif keys[pg.K_d] :
+                self.position += vec(10,0) 
+            elif keys[pg.K_SPACE] : 
+                self.Action2() # Action2 du joueur
 
-        if self.occupe: # Le joueur est occupé par un grappin
+        if self.occupe: 
             self.UpdateGrappin()
 
-        self.rect.midbottom = ... # Position du joueur
+        self.rect.midbottom = self.position 
 
 
     def UpdateGrappin(self):
-        if self.attire != ... or self.attireur != ... : # On vérifie qu'un des deux (attire ou attireur) n'est pas None
-            if self.attire != None: # Le joueur est l'attireur
+        if self.attire != None or self.attireur != None : 
+            if self.attire != None:
                 attire = self.attire
                 attireur = self
-            elif self.attireur != ... : # Le joueur est attiré
-                attire = ...
-                attireur = ...
+            elif self.attireur != None :
+                attire = self
+                attireur = self.attire
 
-            collided = pg.sprite.spritecollide(attire, [attireur], False) # On vérifie si l'attireur et l'attiré ont collisioné
+            collided = pg.sprite.spritecollide(attire, [attireur], False) 
 
             if ... : # Les deux ont collisioné
-                attireur.Reset() # Le joueur n'est plus occupé
-                attire.Reset() # Ni la cible
+                attireur.Reset()
+                attire.Reset()
             else:
                 x1, y1 = attireur.position
                 x2, y2 = attire.position
@@ -137,24 +136,24 @@ class Player1(Player):
         grappinAnimator = None
         Player.__init__(self, animator)
         self.grappin = Grappin1(grappinAnimator)
-        self.selected = ... # Joueur 1 doit être selectionné
+        self.selected = True
         self.jumpHeight = -20
-        self.isOnGround = True # Permet de savoir si le joueur touche le sol
+        self.isOnGround = True
 
     def Action1(self, cible):
         assert type(cible) is Cible
-        if ... : # La cible est-elle mobile ?
-            attireur = ...
-            attire = ...
+        if cible.mobile == True : 
+            attireur = self
+            attire = cible
         else:
-            ... = ...
-            ... = ...
+            attireur = cible
+            attire = self
 
-        self.grappin.Attirer(..., ...)
+        self.grappin.Attirer(attireur, attire)
 
-    def Action2(self): # Sauter
-        if ... : # Le joueur touche-t-il le sol ?
-            self.position += vec(0, ...) # On rajoute jumpHeight à l'ordonnée du joueur
+    def Action2(self):
+        if self.isOnGround == False : 
+            self.position += vec(0, jumpHeight) 
 
 
 class Player2(Player):
@@ -165,18 +164,18 @@ class Player2(Player):
         self.bouclier = Bouclier1(bouclierAnimator)
         self.weapon = Weapon1(weaponAnimator)
 
-    def Action1(self, cible): # Attaque
+    def Action1(self, cible):
         assert type(cible) is Ennemi
         distance = cible.position.distance_to(self.position)
-        if ... : # La distance entre l'ennemi et le joueur est inférieure à la portée de l'arme (utiliser la fonction valeur absolue abs)
+        if distance < self.weapon.portee :
             cible.TakeDamage(self.weapon.degat)
 
-    def Action2(self): # Défense
+    def Action2(self):
         pass
 ########################################################################################
 class Ennemi(Cible):
     def __init__(self, animator, HP, degat, portee, target):
-        Cible.__init__(self, animator, ...) # L'ennemi doit-être mobile
+        Cible.__init__(self, animator, mobile) # L'ennemi doit-être mobile
         self.HP = ...
         self.degat = ...
         self.portee = ... 
@@ -200,5 +199,3 @@ class Ennemi(Cible):
 
     def BougerVers(self, target):
         pass
-
-#########################################################################################
